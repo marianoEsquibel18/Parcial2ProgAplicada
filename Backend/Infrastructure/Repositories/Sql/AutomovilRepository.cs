@@ -55,5 +55,10 @@ namespace Infrastructure.Repositories.Sql
             return await _context.Automoviles.FirstOrDefaultAsync(a => a.NumeroChasis == numeroChasis);
         }
 
+        public async Task<Automovil> GetByMotorAsync(string numeroMotor)
+        {
+            return await _context.Automoviles
+                .FirstOrDefaultAsync(a => a.NumeroMotor == numeroMotor);
+        }
     }
 }

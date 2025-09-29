@@ -15,6 +15,8 @@ namespace Application.Repositories
         Task UpdateAsync(Automovil automovil);
         Task DeleteAsync(int Id);
         Task <Automovil> GetByChasisAsync (string NumeroChasis);
+        Task<Automovil> GetByMotorAsync(string numeroMotor);
+
 
     }
 }

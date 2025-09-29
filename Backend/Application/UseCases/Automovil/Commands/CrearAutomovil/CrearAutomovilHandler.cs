@@ -17,9 +17,20 @@ namespace Application.UseCases.Automovil.Commands.CrearAutomovil
         {
             _repository = repository;
         }
-        public async Task<int> 
-        Handle(CrearAutomovilCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CrearAutomovilCommand request, CancellationToken cancellationToken)
         {
+
+            var existeMotor = await _repository.GetByMotorAsync(request.NumeroMotor);
+            if (existeMotor != null)
+            {
+                throw new InvalidOperationException($"Ya existe un automóvil con el número de motor: {request.NumeroMotor}");
+            }
+
+            var existeChasis = await _repository.GetByChasisAsync(request.NumeroChasis);
+            if (existeChasis != null)
+            {
+                throw new InvalidOperationException($"Ya existe un automóvil con el número de chasis: {request.NumeroChasis}");
+            }
             var automovil = new Domain.Entities.Automovil
             {
                 Marca = request.Marca,

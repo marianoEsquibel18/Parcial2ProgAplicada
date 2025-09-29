@@ -5,6 +5,7 @@ using Core.Application;
 using Filters;
 using Infrastructure.Registrations;
 using Infrastructure.Repositories.Sql;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -24,19 +25,27 @@ namespace API
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddInfrastructureServices(Configuration);
-            services.AddApplicationServices();  // Esto debe estar ANTES de Infrastructure
+            services.AddApplicationServices();
 
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+            });
 
-            services.AddDbContext<StoreDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<StoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+           
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hybrid Architecture Project", Version = "v1" });
             });
+            
             services.AddMvc().AddMvcOptions(options =>
             {
                 options.Filters.Add<BaseExceptionFilter>();
             });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", builder => builder

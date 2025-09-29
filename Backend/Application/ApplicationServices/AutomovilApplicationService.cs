@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Application.UseCases.Automovil.Commands;
 using Application.UseCases.Automovil.Commands.CrearAutomovil;
-using Application.UseCases.Automovil.Queries.GetAllAutomoviles;  
+using Application.UseCases.Automovil.Queries.GetAllAutomoviles;
+using Application.UseCases.Automovil.Queries.GetByIdAutomoviles;
+using Application.UseCases.Automovil.Queries.GetByChasisAutomoviles;
+using Application.UseCases.Automovil.Commands.UpdateAutomovil;
+using Application.UseCases.Automovil.Commands.DeleteAutomovil;
 using Domain.Entities; 
 
 namespace Application.ApplicationServices
@@ -27,6 +31,32 @@ namespace Application.ApplicationServices
         {
             var query = new GetAllAutomovilQuery();
             return await _mediator.Send(query);
+        }
+
+        public async Task<Domain.Entities.Automovil> ObtenerAutomovilPorId(int id)
+        {
+            var query = new GetByIdAutomovilQuery { Id = id };
+            return await _mediator.Send(query);
+        }
+
+        public async Task<Domain.Entities.Automovil> ObtenerAutomovilPorChasis(string numeroChasis)
+        {
+            var query = new GetByChasisAutomovilQuery
+            {
+                NumeroChasis = numeroChasis
+            };
+            return await _mediator.Send(query);
+        }
+
+        public async Task<bool> ActualizarAutomovil(UpdateAutomovilCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<bool> EliminarAutomovil(int id)
+        {
+            var command = new DeleteAutomovilCommand { Id = id };
+            return await _mediator.Send(command);
         }
     }
 }

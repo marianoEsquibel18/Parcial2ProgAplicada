@@ -29,9 +29,16 @@ namespace Infrastructure.Repositories.Sql
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<DummyEntity>().ToTable("DummyEntity"); // COMENTA ESTO
+            // modelBuilder.Entity<DummyEntity>().ToTable("DummyEntity"); 
             modelBuilder.Entity<Alumno>().ToTable("Alumno");
-            modelBuilder.Entity<Automovil>().ToTable("Automoviles"); // AGREGA ESTO
+            modelBuilder.Entity<Automovil>().ToTable("Automoviles");
+            modelBuilder.Entity<Automovil>()
+                .HasIndex(a => a.NumeroMotor)
+                .IsUnique();
+
+            modelBuilder.Entity<Automovil>()
+                .HasIndex(a => a.NumeroChasis)
+                .IsUnique();
         }
     }
 }
